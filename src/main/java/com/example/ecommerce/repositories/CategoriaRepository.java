@@ -1,4 +1,4 @@
-import com.example.ecommerce.models.Categoria;
+package com.example.ecommerce.repositories;
 
 import com.example.ecommerce.models.Categoria;
 import java.util.List;

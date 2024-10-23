@@ -13,6 +13,7 @@ public class ClienteRepositoryImp implements ClienteRepository{
     @Autowired
     private Sql2o sql2o;
 
+    @Override
     public Cliente create(Cliente cliente){
         String sql = "INSERT INTO Cliente (nombre, direccion, email, telefono) " +
                 "VALUES (:nombre, :direccion, :email, :telefono) " +
@@ -67,10 +68,10 @@ public class ClienteRepositoryImp implements ClienteRepository{
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("id", id)
-                    .addParameter("Nombre", Cliente.getNombre())
-                    .addParameter("Direccion", Cliente.getDireccion())
-                    .addParameter("Email", Cliente.getEmail())
-                    .addParameter("Telefono", Cliente.getTelefono())
+                    .addParameter("Nombre", cliente.getNombre())
+                    .addParameter("Direccion", cliente.getDireccion())
+                    .addParameter("Email", cliente.getEmail())
+                    .addParameter("Telefono", cliente.getTelefono())
                     .executeUpdate();
             return cliente;
         }

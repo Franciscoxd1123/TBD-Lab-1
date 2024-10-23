@@ -1,8 +1,9 @@
-import com.example.ecommerce.models.Cliente;
+package com.example.ecommerce.repositories;
 
+import com.example.ecommerce.models.Cliente;
 import java.util.List;
 
-import com.example.ecommerce.models.Cliente;
+
 public interface ClienteRepository {
 
     Cliente create(Cliente cliente);

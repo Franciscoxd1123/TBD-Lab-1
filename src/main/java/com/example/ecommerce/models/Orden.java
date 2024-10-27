@@ -1,7 +1,9 @@
 package com.example.ecommerce.models;
 
+import lombok.Data;
 import java.util.Date;
 
+@Data
 public class Orden{
 
     private Long idOrden;

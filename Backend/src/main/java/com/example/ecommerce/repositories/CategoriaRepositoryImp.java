@@ -18,11 +18,12 @@ public class CategoriaRepositoryImp implements CategoriaRepository{
         String sql = "INSERT INTO Categoria (nombre) " + "VALUES (:nombre) " + "RETURNING id_categoria";
 
         try (Connection con = sql2o.open()) {
-            Long id = con.createQuery(sql, true)
+            Integer id = con.createQuery(sql, true)
                     .addParameter("nombre", categoria.getNombre())
-                    .executeAndFetchFirst(Long.class);
+                    .executeUpdate()
+                    .getKey(Integer.class);
 
-            categoria.setIdCategoria(id);
+            categoria.setIdCategoria(Long.valueOf(id));
             return categoria;
         }
 

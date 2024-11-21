@@ -19,14 +19,15 @@ public class ClienteRepositoryImp implements ClienteRepository{
                 "VALUES (:nombre, :direccion, :email, :telefono) " +
                 "RETURNING id_cliente";
         try (Connection con = sql2o.open()) {
-            Long id = con.createQuery(sql, true)
+            Integer id = con.createQuery(sql, true)
                     .addParameter("nombre", cliente.getNombre())
                     .addParameter("direccion", cliente.getDireccion())
                     .addParameter("email", cliente.getEmail())
                     .addParameter("telefono", cliente.getTelefono())
-                    .executeAndFetchFirst(Long.class);
+                    .executeUpdate()
+                    .getKey(Integer.class);
 
-            cliente.setIdCliente(id);
+            cliente.setIdCliente(Long.valueOf(id));
             return cliente;
         }
         catch (Exception e) {

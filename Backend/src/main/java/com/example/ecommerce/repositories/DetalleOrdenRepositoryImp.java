@@ -13,19 +13,20 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository {
     private Sql2o sql2o;
 
     public DetalleOrden create(DetalleOrden detalleOrden) {
-        String sql = "INSERT INTO DetalleOrden (id_orden, id_producto, cantidad, precio_unitario) " +
+        String sql = "INSERT INTO detalle_orden (id_orden, id_producto, cantidad, precio_unitario) " +
                 "VALUES (:idOrden, :idProducto, :cantidad, :precioUnitario) " +
                 "RETURNING id_detalle";
 
         try (Connection con = sql2o.open()) {
-            Long id = con.createQuery(sql, true)
+            Integer id = con.createQuery(sql, true)
                     .addParameter("idOrden", detalleOrden.getIdOrden())
                     .addParameter("idProducto", detalleOrden.getIdProducto())
                     .addParameter("cantidad", detalleOrden.getCantidad())
                     .addParameter("precioUnitario", detalleOrden.getPrecioUnitario())
-                    .executeAndFetchFirst(Long.class);
+                    .executeUpdate()
+                    .getKey(Integer.class);
 
-            detalleOrden.setIdDetalle(id);
+            detalleOrden.setIdDetalle(Long.valueOf(id));
             return detalleOrden;
         }
     }
@@ -53,10 +54,11 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository {
     }
 
     public DetalleOrden update(DetalleOrden detalleOrden, int id) {
-        String sql = "UPDATE DetalleOrden SET id_orden = :idOrden, id_producto = :idProudcto, cantidad = :cantidad, precio_unitario = :precioUnitario";
+        String sql = "UPDATE detalle_orden SET id_orden = :idOrden, id_producto = :idProducto, cantidad = :cantidad, precio_unitario = :precioUnitario WHERE id_detalle = :id";
 
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
+                    .addParameter("id", id)
                     .addParameter("idOrden", detalleOrden.getIdOrden())
                     .addParameter("idProducto", detalleOrden.getIdProducto())
                     .addParameter("cantidad", detalleOrden.getCantidad())
@@ -70,10 +72,10 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository {
     }
 
     public void delete(int id) {
-        String sql = "DELETE FROM DetalleOrden WHERE id_orden = :idOrden";
+        String sql = "DELETE FROM detalle_orden WHERE id_detalle = :id";
 
         try (Connection con = sql2o.open()) {
-            con.createQuery(sql).addParameter("idOrden", id).executeUpdate();
+            con.createQuery(sql).addParameter("id",id).executeUpdate();
         } catch (Exception e) {
             System.out.println("Error al eliminar el detalle de orden: " + e.getMessage());
         }

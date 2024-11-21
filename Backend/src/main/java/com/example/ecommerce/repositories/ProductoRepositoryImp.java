@@ -20,16 +20,17 @@ public class ProductoRepositoryImp implements ProductoRepository{
                 "RETURNING id_producto";
 
         try (Connection con = sql2o.open()) {
-            Long id = con.createQuery(sql, true)
+            Integer id = con.createQuery(sql, true)
                     .addParameter("nombre", producto.getNombre())
                     .addParameter("descripcion", producto.getDescripcion())
                     .addParameter("precio", producto.getPrecio())
                     .addParameter("stock", producto.getStock())
                     .addParameter("estado", producto.getEstado())
                     .addParameter("idCategoria", producto.getIdCategoria())
-                    .executeAndFetchFirst(Long.class);
+                    .executeUpdate()
+                    .getKey(Integer.class);
 
-            producto.setIdProducto(id);
+            producto.setIdProducto(Long.valueOf(id));
             return producto;
         }
         catch (Exception e) {

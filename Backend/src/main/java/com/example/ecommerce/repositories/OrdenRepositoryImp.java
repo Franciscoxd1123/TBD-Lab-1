@@ -21,14 +21,15 @@ public class OrdenRepositoryImp implements OrdenRepository {
                 "RETURNING id_orden";
 
         try (Connection con = sql2o.open()) {
-            Long id = con.createQuery(sql, true)
+            Integer id = con.createQuery(sql, true)
                     .addParameter("fechaOrden", orden.getFechaOrden())
                     .addParameter("estado", orden.getEstado())
                     .addParameter("idCliente", orden.getIdCliente())
                     .addParameter("total", orden.getTotal())
-                    .executeAndFetchFirst(Long.class);
+                    .executeUpdate()
+                    .getKey(Integer.class);
 
-            orden.setIdOrden(id);
+            orden.setIdOrden(Long.valueOf(id));
             return orden;
         } catch (Exception e) {
             System.out.println("Error al crear la orden: " + e.getMessage());
@@ -38,7 +39,7 @@ public class OrdenRepositoryImp implements OrdenRepository {
 
     @Override
     public List<Orden> getAll() {
-        String sql = "SELECT id_orden AS idOrden, fecha_orden AS fechaOrden, estado, id_cliente AS idCliente, total FROM Orden ORDER BY fecha_orden DESC";
+        String sql = "SELECT id_orden AS idOrden, fecha_orden AS fechaOrden, estado, id_cliente AS idCliente, total FROM Orden";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).executeAndFetch(Orden.class);
@@ -95,7 +96,7 @@ public class OrdenRepositoryImp implements OrdenRepository {
 
     @Override
     public List<Orden> getOrdenesCliente(int idCliente) {
-        String sql = "SELECT * FROM Orden WHERE id_cliente = :idCliente ORDER BY fecha_orden DESC";
+        String sql = "SELECT id_orden AS idOrden, fecha_orden AS fechaOrden, estado, id_cliente AS idCliente, total FROM Orden WHERE id_cliente = :idCliente ORDER BY fecha_orden DESC";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql)

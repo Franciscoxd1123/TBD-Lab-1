@@ -8,7 +8,7 @@ public interface DetalleOrdenRepository {
 
     List<DetalleOrden> getAll();
 
-    DetalleOrden getById(int id);
+    DetalleOrden getDetalleById(int id);
 
     DetalleOrden update(DetalleOrden detalleOrden, int id);
 

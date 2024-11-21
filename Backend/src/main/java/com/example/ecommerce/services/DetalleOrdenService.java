@@ -22,7 +22,7 @@ public class DetalleOrdenService {
     }
 
     public DetalleOrden getDetalleOrden(int id){
-        return detalleOrdenRepository.getById(id);
+        return detalleOrdenRepository.getDetalleById(id);
     }
 
     public DetalleOrden updateDetalleOrden(DetalleOrden detalleOrden, int id){

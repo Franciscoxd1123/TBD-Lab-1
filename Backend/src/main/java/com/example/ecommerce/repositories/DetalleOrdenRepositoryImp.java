@@ -31,7 +31,7 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository {
     }
 
     public List<DetalleOrden> getAll() {
-        String sql = "SELECT * FROM DetalleOrden";
+        String sql = "SELECT id_detalle AS idDetalle, id_orden AS idOrden, id_producto AS idProducto, cantidad, precio_unitario AS precioUnitario FROM detalle_orden";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).executeAndFetch(DetalleOrden.class);
@@ -41,11 +41,11 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository {
         }
     }
 
-    public DetalleOrden getById(int id) {
-        String sql = "SELECT * FROM DetalleOrden WHERE id_detalle = :idDetalle";
+    public DetalleOrden getDetalleById(int id) {
+        String sql = "SELECT id_detalle AS idDetalle, id_orden AS idOrden, id_producto AS idProducto, cantidad, precio_unitario AS precioUnitario FROM detalle_orden WHERE id_detalle = :id";
 
         try (Connection con = sql2o.open()) {
-            return con.createQuery(sql).addParameter("idDetalle", id).executeAndFetchFirst(DetalleOrden.class);
+            return con.createQuery(sql).addParameter("id",id).executeAndFetchFirst(DetalleOrden.class);
         } catch (Exception e) {
             System.out.println("Error al consultar el detalle de orden: " + e.getMessage());
             return null;

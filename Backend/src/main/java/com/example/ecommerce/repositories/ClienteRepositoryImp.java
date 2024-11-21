@@ -37,7 +37,7 @@ public class ClienteRepositoryImp implements ClienteRepository{
 
     @Override
     public List<Cliente> getAll() {
-        String sql = "SELECT * FROM Cliente";
+        String sql = "SELECT id_cliente AS idCliente, nombre, direccion, email, telefono FROM Cliente";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).executeAndFetch(Cliente.class);
@@ -50,7 +50,7 @@ public class ClienteRepositoryImp implements ClienteRepository{
 
     @Override
     public Cliente getClienteId(int id){
-        String sql = "SELECT * FROM Cliente WHERE id_cliente = :id";
+        String sql = "SELECT id_cliente AS idCliente, nombre, direccion, email, telefono FROM Cliente WHERE id_cliente = :id";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).addParameter("id",id).executeAndFetchFirst(Cliente.class);

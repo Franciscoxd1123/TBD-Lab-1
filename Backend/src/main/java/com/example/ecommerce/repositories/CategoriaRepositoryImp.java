@@ -34,7 +34,7 @@ public class CategoriaRepositoryImp implements CategoriaRepository{
 
     @Override
     public List<Categoria> getAll() {
-        String sql = "SELECT * FROM Categoria";
+        String sql = "SELECT id_categoria AS idCategoria, nombre FROM Categoria";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).executeAndFetch(Categoria.class);
@@ -47,7 +47,7 @@ public class CategoriaRepositoryImp implements CategoriaRepository{
 
     @Override
     public Categoria getCategoriaId(int id){
-        String sql = "SELECT * FROM Categoria WHERE id_categoria = :id";
+        String sql = "SELECT id_categoria AS idCategoria, nombre FROM Categoria WHERE id_categoria = :id";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).addParameter("id",id).executeAndFetchFirst(Categoria.class);

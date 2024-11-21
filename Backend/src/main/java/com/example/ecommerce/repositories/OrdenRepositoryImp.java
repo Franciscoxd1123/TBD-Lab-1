@@ -5,10 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+
 import java.util.List;
 
 @Repository
-public class OrdenRepositoryImp implements OrdenRepository{
+public class OrdenRepositoryImp implements OrdenRepository {
 
     @Autowired
     private Sql2o sql2o;
@@ -29,8 +30,7 @@ public class OrdenRepositoryImp implements OrdenRepository{
 
             orden.setIdOrden(id);
             return orden;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error al crear la orden: " + e.getMessage());
             return null;
         }
@@ -38,12 +38,11 @@ public class OrdenRepositoryImp implements OrdenRepository{
 
     @Override
     public List<Orden> getAll() {
-        String sql = "SELECT * FROM Orden ORDER BY fecha_orden DESC";
+        String sql = "SELECT id_orden AS idOrden, fecha_orden AS fechaOrden, estado, id_cliente AS idCliente, total FROM Orden ORDER BY fecha_orden DESC";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).executeAndFetch(Orden.class);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error al consultar las órdenes: " + e.getMessage());
             return null;
         }
@@ -51,14 +50,13 @@ public class OrdenRepositoryImp implements OrdenRepository{
 
     @Override
     public Orden getOrdenById(int id) {
-        String sql = "SELECT * FROM Orden WHERE id_orden = :id";
+        String sql = "SELECT id_orden AS idOrden, fecha_orden AS fechaOrden, estado, id_cliente AS idCliente, total FROM Orden WHERE id_orden = :id";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql)
                     .addParameter("id", id)
                     .executeAndFetchFirst(Orden.class);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error al consultar la orden: " + e.getMessage());
             return null;
         }
@@ -76,8 +74,7 @@ public class OrdenRepositoryImp implements OrdenRepository{
                     .addParameter("total", orden.getTotal())
                     .executeUpdate();
             return orden;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error al actualizar la orden: " + e.getMessage());
             return null;
         }
@@ -91,8 +88,7 @@ public class OrdenRepositoryImp implements OrdenRepository{
             con.createQuery(sql)
                     .addParameter("id", id)
                     .executeUpdate();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error al eliminar la orden: " + e.getMessage());
         }
     }
@@ -105,8 +101,7 @@ public class OrdenRepositoryImp implements OrdenRepository{
             return con.createQuery(sql)
                     .addParameter("idCliente", idCliente)
                     .executeAndFetch(Orden.class);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error al consultar las órdenes del cliente: " + e.getMessage());
             return null;
         }

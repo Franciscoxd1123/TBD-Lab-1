@@ -40,7 +40,7 @@ public class ProductoRepositoryImp implements ProductoRepository{
 
     @Override
     public List<Producto> getAll() {
-        String sql = "SELECT * FROM Producto";
+        String sql = "SELECT id_producto AS idProducto, nombre, descripcion, precio, stock, estado, id_categoria AS idCategoria FROM Producto";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).executeAndFetch(Producto.class);
@@ -53,7 +53,7 @@ public class ProductoRepositoryImp implements ProductoRepository{
 
     @Override
     public Producto getProductoId(int id){
-        String sql = "SELECT * FROM Producto WHERE id_producto = :id";
+        String sql = "SELECT id_producto AS idProducto, nombre, descripcion, precio, stock, estado, id_categoria AS idCategoria FROM Producto WHERE id_producto = :id";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).addParameter("id",id).executeAndFetchFirst(Producto.class);

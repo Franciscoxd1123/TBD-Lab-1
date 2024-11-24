@@ -54,7 +54,20 @@ const handleSubmit = async () => {
     )
     
     if (response.data) {
-      localStorage.setItem('email', JSON.stringify(response.data))
+      const userData = {
+        idCliente: response.data.idCliente,
+        email: response.data.email,
+        nombre: response.data.nombre,
+        direccion: response.data.direccion,
+        telefono: response.data.telefono
+      }
+      
+      localStorage.setItem('userData', JSON.stringify(userData))
+      
+      localStorage.setItem('email', response.data.email)
+      
+      console.log('Usuario logueado:', userData) 
+      
       router.push('/user-menu')
     }
   } catch (err) {

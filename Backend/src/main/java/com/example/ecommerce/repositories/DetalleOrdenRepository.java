@@ -13,4 +13,6 @@ public interface DetalleOrdenRepository {
     DetalleOrden update(DetalleOrden detalleOrden, int id);
 
     void delete(int id);
+
+    List<DetalleOrden> getDetallesByOrden(int idOrden);
 }

@@ -9,6 +9,6 @@ public class Sql2oConfig {
 
     @Bean
     public Sql2o sql2o() {
-        return new Sql2o("jdbc:postgresql://localhost:5432/Ecommerce", "admin", "1234");
+        return new Sql2o("jdbc:postgresql://localhost:5432/Ecommerce", "postgres", "admin");
     }
 }

@@ -24,6 +24,11 @@ export default {
         return apiClient.get(`/${id}`);
     },
 
+    // Obtener detalles por orden
+    getDetallesByOrden(idOrden) {
+        return apiClient.get(`/orden/${idOrden}`);
+    },
+
     // Actualizar un detalle de orden
     updateDetalleOrden(id, data) {
         return apiClient.put(`/${id}`, data);

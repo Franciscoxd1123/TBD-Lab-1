@@ -32,4 +32,8 @@ public class DetalleOrdenService {
     public void deleteDetalleOrden(int id){
         detalleOrdenRepository.delete(id);
     }
+
+    public List<DetalleOrden> getDetallesByOrden(int idOrden) {
+        return detalleOrdenRepository.getDetallesByOrden(idOrden);
+    }
 }

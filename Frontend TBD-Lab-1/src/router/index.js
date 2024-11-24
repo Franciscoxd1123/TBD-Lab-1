@@ -9,6 +9,7 @@ import EditarTareaView from '../views/EditarTareaView.vue';
 import MarkTask from '../components/MarkTask.vue';
 import ViewTask from '../components/ViewTask.vue';
 import Notifications from '../components/Notifications.vue';
+import HistorialCompra from '../components/HistorialCompra.vue';
 
 
 
@@ -62,6 +63,11 @@ const routes = [
     path: '/notifications',
     name: 'Notifications',
     component: Notifications,
+  },
+  {
+    path: '/historial-compras',
+    name: 'HistorialCompra',
+    component: HistorialCompra,
   },
   
 ];

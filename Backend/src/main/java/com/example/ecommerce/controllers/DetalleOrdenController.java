@@ -34,6 +34,12 @@ public class DetalleOrdenController{
         return ResponseEntity.ok(detalleOrden);
     }
 
+    @GetMapping("/orden/{idOrden}")
+    public ResponseEntity<List<DetalleOrden>> getDetallesByOrden(@PathVariable int idOrden) {
+        List<DetalleOrden> detalles = detalleOrdenService.getDetallesByOrden(idOrden);
+        return ResponseEntity.ok(detalles);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<DetalleOrden> updateProducto(@RequestBody DetalleOrden detalleOrden, @PathVariable int id){
         DetalleOrden detalleOrdenUptadted = detalleOrdenService.updateDetalleOrden(detalleOrden, id);

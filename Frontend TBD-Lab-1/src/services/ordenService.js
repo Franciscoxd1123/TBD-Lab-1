@@ -37,5 +37,9 @@ export default {
     // Eliminar una orden
     deleteOrden(id) {
         return apiClient.delete(`/${id}`);
+    },
+
+    getDetallesOrden(idOrden) {
+        return apiClient.get(`/detalles/${idOrden}`);
     }
 };

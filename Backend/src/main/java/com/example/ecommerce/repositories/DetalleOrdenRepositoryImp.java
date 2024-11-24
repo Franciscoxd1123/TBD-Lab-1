@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -78,6 +80,21 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository {
             con.createQuery(sql).addParameter("id",id).executeUpdate();
         } catch (Exception e) {
             System.out.println("Error al eliminar el detalle de orden: " + e.getMessage());
+        }
+    }
+
+    public List<DetalleOrden> getDetallesByOrden(int idOrden) {
+        String sql = "SELECT id_detalle AS idDetalle, id_orden AS idOrden, " +
+                "id_producto AS idProducto, cantidad, precio_unitario AS precioUnitario " +
+                "FROM detalle_orden WHERE id_orden = :idOrden";
+
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql)
+                    .addParameter("idOrden", idOrden)
+                    .executeAndFetch(DetalleOrden.class);
+        } catch (Exception e) {
+            System.out.println("Error al consultar los detalles de la orden: " + e.getMessage());
+            return new ArrayList<>();
         }
     }
 }

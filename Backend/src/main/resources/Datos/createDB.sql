@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS Orden;
 DROP TABLE IF EXISTS Producto;
 DROP TABLE IF EXISTS Categoria;
 DROP TABLE IF EXISTS Cliente;
+DROP TABLE IF EXISTS log_auditoria;
 
 CREATE TABLE Categoria(
 	id_categoria SERIAL NOT NULL,
@@ -52,4 +53,13 @@ CREATE TABLE Detalle_Orden(
 	PRIMARY KEY (id_detalle),
 	FOREIGN KEY (id_orden) REFERENCES Orden(id_orden),
 	FOREIGN KEY (id_producto) REFERENCES Producto(id_producto)
+);
+
+CREATE TABLE log_auditoria (
+    id_log SERIAL PRIMARY KEY,
+    usuario VARCHAR(255),
+    operacion VARCHAR(50),
+    tabla VARCHAR(50),
+    datos JSONB,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -14,7 +14,7 @@ ClientesMultiplesCompras AS (
     GROUP BY id_cliente, fecha
     HAVING COUNT(id_orden) > 1
 )
-SELECT c.id_cliente, c.nombre AS nombre_cliente, p.nombre AS nombre_producto
+SELECT c.id_cliente, c.nombre AS nombre_cliente, p.nombre AS nombre_producto, cmc.fecha AS fecha_compra
 FROM ClientesMultiplesCompras cmc
 JOIN OrdenesUltimoMes oum ON cmc.id_cliente = oum.id_cliente AND cmc.fecha = oum.fecha
 JOIN Detalle_Orden d ON oum.id_orden = d.id_orden

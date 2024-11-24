@@ -16,5 +16,8 @@ public interface ClienteRepository {
 
     void delete(int id);
 
+    boolean existeEmail(String email);
+
+    Cliente findByEmail(String email);
 
 }

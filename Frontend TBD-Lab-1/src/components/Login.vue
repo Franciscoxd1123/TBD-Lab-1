@@ -9,18 +9,8 @@
     <div class="form-field">
       <div class="label">Email</div>
       <input 
-        v-model="loginData.correo"
+        v-model="loginData.email"
         type="email" 
-        required
-        placeholder=" "
-      >
-    </div>
-
-    <div class="form-field">
-      <div class="label">Contraseña</div>
-      <input 
-        v-model="loginData.contrasena"
-        type="password" 
         required
         placeholder=" "
       >
@@ -39,40 +29,38 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import usuarioService from '../services/usuarioService'
+import clienteService from '../services/clienteService'
 
 const router = useRouter()
 const error = ref('')
 const loading = ref(false)
 
 const loginData = reactive({
-  correo: '',
-  contrasena: ''
+  email: ''
 })
 
 const handleSubmit = async () => {
   try {
-    if (!loginData.correo || !loginData.contrasena) {
-      error.value = 'Por favor, complete todos los campos'
+    if (!loginData.email) {
+      error.value = 'Por favor, complete el campo'
       return
     }
 
     loading.value = true
     error.value = ''
 
-    const response = await usuarioService.loginUsuario(
-      loginData.correo, 
-      loginData.contrasena
+    const response = await clienteService.loginCliente(
+      loginData.email
     )
     
     if (response.data) {
-      localStorage.setItem('usuario', JSON.stringify(response.data))
+      localStorage.setItem('email', JSON.stringify(response.data))
       router.push('/user-menu')
     }
   } catch (err) {
     console.error('Error de login:', err)
     if (err.response?.status === 401) {
-      error.value = 'Correo o contraseña incorrectos'
+      error.value = 'Email incorrecto'
     } else if (err.response?.data) {
       error.value = err.response.data
     } else {

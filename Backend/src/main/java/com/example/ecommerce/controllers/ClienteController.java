@@ -3,13 +3,16 @@ package com.example.ecommerce.controllers;
 import com.example.ecommerce.models.Cliente;
 import com.example.ecommerce.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/clientes")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ClienteController {
 
     @Autowired
@@ -44,4 +47,25 @@ public class ClienteController {
     public void deleteCliente(@PathVariable int id) {
         clienteService.deleteCliente(id);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales) {
+        try {
+            String email = credenciales.get("email");
+
+            if (email == null) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Correo requerido");
+            }
+
+            Cliente cliente = clienteService.login(email);
+            return ResponseEntity.ok(cliente);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(e.getMessage());
+        }
+    }
+
 }

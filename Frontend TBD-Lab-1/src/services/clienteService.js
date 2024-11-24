@@ -23,6 +23,10 @@ export default {
         return apiClient.get(`/${id}`);
     },
 
+    loginCliente(email) {
+        return apiClient.post('/login', { email });
+    },
+
     // Actualizar un cliente
     updateCliente(id, data) {
         return apiClient.put(`/${id}`, data);

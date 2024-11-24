@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 @Service
 public class ClienteService {
 
@@ -30,5 +31,46 @@ public class ClienteService {
 
     public void deleteCliente(int id){
         clienteRepository.delete(id);
+    }
+
+    public Cliente registrarCliente(Cliente cliente) {
+        validarCamposRegistro(cliente);
+        if (!esEmailValido(cliente.getEmail())) {
+            throw new IllegalArgumentException("El formato del email electrónico no es válido");
+        }
+        if (existeEmail(cliente.getEmail())) {
+            throw new IllegalArgumentException("El email electrónico ya está registrado");
+        }
+
+        return clienteRepository.create(cliente);
+    }
+
+    private void validarCamposRegistro(Cliente cliente) {
+        if (cliente.getNombre() == null || cliente.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre es obligatorio");
+        }
+        if (cliente.getEmail() == null || cliente.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("El email es obligatorio");
+        }
+    }
+
+    private boolean esEmailValido(String email) {
+        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        return Pattern.matches(regex, email);
+    }
+
+    private boolean existeEmail(String email) {
+        return clienteRepository.existeEmail(email);
+    }
+
+    public Cliente login(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("El email es requerido");
+        }
+        Cliente cliente = clienteRepository.findByEmail(email);
+        if (cliente == null) {
+            throw new IllegalArgumentException("Email o contraseña incorrectos");
+        }
+        return cliente;
     }
 }

@@ -9,7 +9,17 @@
     <div class="form-field">
       <div class="label">Nombre</div>
       <input 
-        v-model="userData.nombre" 
+        v-model="clientData.nombre" 
+        type="text" 
+        required
+        placeholder=" "
+      >
+    </div>
+
+    <div class="form-field">
+      <div class="label">Dirección</div>
+      <input 
+        v-model="clientData.direccion"
         type="text" 
         required
         placeholder=" "
@@ -19,7 +29,7 @@
     <div class="form-field">
       <div class="label">Email</div>
       <input 
-        v-model="userData.correo"
+        v-model="clientData.email"
         type="email" 
         required
         placeholder=" "
@@ -27,10 +37,10 @@
     </div>
 
     <div class="form-field">
-      <div class="label">Contraseña</div>
+      <div class="label">Teléfono</div>
       <input 
-        v-model="userData.contrasena"
-        type="password" 
+        v-model="clientData.telefono"
+        type="tel" 
         required
         placeholder=" "
       >
@@ -45,45 +55,50 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import usuarioService from '../services/usuarioService'
+import clienteService from '../services/clienteService'
 
 const router = useRouter()
 const error = ref('')
 
-const userData = reactive({
+const clientData = reactive({
   nombre: '',
-  correo: '',
-  contrasena: '',
-  sesionActiva: false
+  direccion: '',
+  email: '',
+  telefono: ''
 })
 
 const handleSubmit = async () => {
   try {
     error.value = ''
-    
-    if (!userData.nombre || userData.nombre.trim() === '') {
+
+    if (!clientData.nombre || clientData.nombre.trim() === '') {
       error.value = 'El nombre es obligatorio'
       return
     }
-    
-    if (!userData.correo || userData.correo.trim() === '') {
-      error.value = 'El correo es obligatorio'
-      return
-    }
-    
-    if (!userData.contrasena || userData.contrasena.length < 6) {
-      error.value = 'La contraseña debe tener al menos 6 caracteres'
+
+    if (!clientData.direccion || clientData.direccion.trim() === '') {
+      error.value = 'La dirección es obligatoria'
       return
     }
 
-    const response = await usuarioService.registrarUsuario(userData)
+    if (!clientData.email || clientData.email.trim() === '') {
+      error.value = 'El email es obligatorio'
+      return
+    }
+
+    if (!clientData.telefono || clientData.telefono.trim() === '') {
+      error.value = 'El teléfono es obligatorio'
+      return
+    }
+
+    const response = await clienteService.createCliente(clientData)
     if (response.data) {
-      console.log('Usuario registrado:', response.data)
+      console.log('Cliente registrado:', response.data)
       router.push('/login')
     }
   } catch (err) {
     console.error('Error de registro:', err)
-    error.value = err.response?.data || 'Error al registrar usuario'
+    error.value = err.response?.data || 'Error al registrar cliente'
   }
 }
 </script>

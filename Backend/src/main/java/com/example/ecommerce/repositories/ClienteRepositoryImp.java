@@ -94,5 +94,31 @@ public class ClienteRepositoryImp implements ClienteRepository{
         }
     }
 
+    @Override
+    public boolean existeEmail(String email) {
+        String sql = "SELECT COUNT(*) FROM Cliente WHERE email = :email";
+        try (Connection con = sql2o.open()) {
+            int count = con.createQuery(sql)
+                    .addParameter("email", email)
+                    .executeScalar(Integer.class);
+            return count > 0;
+        } catch (Exception e) {
+            System.out.println("Error al verificar el email: " + e.getMessage());
+            return false;
+        }
+    }
 
+    @Override
+    public Cliente findByEmail(String email) {
+        String sql = "SELECT id_cliente AS idCliente, nombre, direccion, email, telefono FROM Cliente WHERE email = :email";
+
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql)
+                    .addParameter("email", email)
+                    .executeAndFetchFirst(Cliente.class);
+        } catch (Exception e) {
+            System.out.println("Error al intentar iniciar sesión: " + e.getMessage());
+            return null;
+        }
+    }
 }

@@ -1,20 +1,53 @@
 <script setup>
+import { ref, onMounted } from 'vue';
+import productoService from '../services/productoService';
+import categoriaService from '../services/categoriaService'; 
 import { useRouter } from 'vue-router';
-import usuarioService from '../services/usuarioService';
+import clienteService from '../services/clienteService';
 
-const props = defineProps({
-  msg: String,
-});
+// Filtros
+const nombreFilter = ref('');
+const categoriaFilter = ref(null);
+const productos = ref([]);
+const categorias = ref([]);  // Para almacenar las categorías obtenidas del backend
 
+// Router
 const router = useRouter();
 
+// Obtener categorías desde el backend
+const listCategorias = async () => {
+  try {
+    const response = await categoriaService.listCategorias();
+    categorias.value = response;  // Asignar las categorías a la variable
+  } catch (error) {
+    console.error('Error al listar categorías:', error);
+  }
+};
+
+// Función para obtener los productos con filtros
+const getProductos = async () => {
+  try {
+    const response = await productoService.getProductos(nombreFilter.value, categoriaFilter.value);
+    productos.value = response;
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+  }
+};
+
+// Obtener categorías y productos al montar el componente
+onMounted(() => {
+  listCategorias();
+  getProductos();
+});
+
+// Función para manejar logout
 const handleLogout = async () => {
   try {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    if (usuario?.idUsuario) {
-      await usuarioService.logoutUsuario(usuario.idUsuario);
+    const cliente = JSON.parse(localStorage.getItem('cliente'));
+    if (cliente?.idCliente) {
+      await clienteService.logoutCliente(cliente.idCliente);
     }
-    localStorage.removeItem('usuario');
+    localStorage.removeItem('cliente');
     router.push('/');
   } catch (error) {
     console.error('Error al cerrar sesión:', error);
@@ -27,10 +60,9 @@ const handleLogout = async () => {
     <aside class="sidebar">
       <h2>Opciones</h2>
       <ul>
-        <li><router-link to="/create-tarea">Crear tareas</router-link></li>
-        <li><router-link to="/tareas-list-edit">Editar tareas</router-link></li>
-        <li><router-link to="/mark-task">Marcar tareas</router-link></li>
-        <li><router-link to="/view-task">Ver tareas</router-link></li>
+        <li><router-link to="/lista-ordenes">Lista de órdenes</router-link></li>
+        <li><router-link to="/devolucion-productos">Devolución de productos</router-link></li>
+        <li><router-link to="/historial-compras">Historial de compras</router-link></li>
         <li><router-link to="/notifications">Notificaciones</router-link></li>
         <li class="logout-item">
           <button @click="handleLogout" class="logout-button">
@@ -42,8 +74,36 @@ const handleLogout = async () => {
 
     <main class="content">
       <section>
-        <h1 class="welcome-msg">{{ msg }}</h1>
-        <p>Selecciona una opción desde la barra lateral para empezar.</p>
+        <h1 class="welcome-msg">Bienvenido a E-commerce</h1>
+
+        <!-- Filtros -->
+        <div class="filters">
+          <input 
+            v-model="nombreFilter" 
+            @input="getProductos" 
+            type="text" 
+            placeholder="Buscar por nombre"
+          />
+          <select v-model="categoriaFilter" @change="getProductos">
+            <option value="">Seleccionar categoría</option>
+            <option v-for="categoria in categorias" :key="categoria.id_categoria" :value="categoria.id_categoria">
+              {{ categoria.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Listado de productos -->
+        <div class="productos-lista">
+          <ul>
+            <li v-for="producto in productos" :key="producto.id_producto">
+              <h3>{{ producto.nombre }}</h3>
+              <p>{{ producto.descripcion }}</p>
+              <p>Precio: ${{ producto.precio }}</p>
+              <p>Stock: {{ producto.stock }}</p>
+              <p>Estado: {{ producto.estado }}</p>
+            </li>
+          </ul>
+        </div>
       </section>
     </main>
   </div>
@@ -112,5 +172,33 @@ const handleLogout = async () => {
 
 .welcome-msg {
   color: orange;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 20px;
+}
+
+.filters input,
+.filters select {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.productos-lista ul {
+  list-style: none;
+  padding: 0;
+}
+
+.productos-lista li {
+  padding: 1rem;
+  background: #f9f9f9;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+
+.productos-lista h3 {
+  font-size: 1.5rem;
 }
 </style>

@@ -32,5 +32,15 @@ export default {
     // Eliminar un producto
     deleteProducto(id) {
         return apiClient.delete(`/${id}`);
+    },
+
+    // Buscar productos por nombre y categoría
+    searchProductosByCategory(nombre, categoria) {
+        return apiClient.get('/', {
+            params: {
+                nombre: nombre,
+                categoria: categoria
+            }
+        });
     }
 };

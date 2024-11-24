@@ -95,4 +95,15 @@ public class ProductoRepositoryImp implements ProductoRepository{
             System.out.println("Error al eliminar el producto: " + e.getMessage());
         }
     }
+
+    @Override
+    public List<Producto> findByCategory(int categoria) {
+        String sql = "SELECT id_producto AS idProducto, nombre, descripcion, precio, stock, estado, id_categoria AS idCategoria FROM Producto WHERE id_categoria = :categoria";
+
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql)
+                    .addParameter("categoria", categoria)
+                    .executeAndFetch(Producto.class); // Devuelve una lista de productos
+        }
+    }
 }

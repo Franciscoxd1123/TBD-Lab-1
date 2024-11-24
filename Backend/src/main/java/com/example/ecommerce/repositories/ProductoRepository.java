@@ -13,4 +13,6 @@ public interface ProductoRepository {
     Producto update(Producto producto, int id);
 
     void delete(int id);
+
+    List<Producto> findByCategory(int categoria);
 }

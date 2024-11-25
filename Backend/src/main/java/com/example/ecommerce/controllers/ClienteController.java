@@ -52,6 +52,7 @@ public class ClienteController {
     public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales) {
         try {
             String email = credenciales.get("email");
+            String password = credenciales.get("password");
 
             if (email == null) {
                 return ResponseEntity
@@ -59,7 +60,7 @@ public class ClienteController {
                         .body("Correo requerido");
             }
 
-            Cliente cliente = clienteService.login(email);
+            Cliente cliente = clienteService.login(email, password);
             return ResponseEntity.ok(cliente);
         } catch (IllegalArgumentException e) {
             return ResponseEntity

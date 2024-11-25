@@ -3,6 +3,8 @@ package com.example.ecommerce.services;
 import com.example.ecommerce.models.Cliente;
 import com.example.ecommerce.repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +15,11 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     public Cliente createCliente(Cliente cliente){
+        String encodedPassword = passwordEncoder.encode(cliente.getPassword());
+        cliente.setPassword(encodedPassword);
         return clienteRepository.create(cliente);
     }
 
@@ -63,7 +69,7 @@ public class ClienteService {
         return clienteRepository.existeEmail(email);
     }
 
-    public Cliente login(String email) {
+    public Cliente login(String email, String password) {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("El email es requerido");
         }
@@ -71,6 +77,10 @@ public class ClienteService {
         if (cliente == null) {
             throw new IllegalArgumentException("Email o contraseña incorrectos");
         }
-        return cliente;
+        if (passwordEncoder.matches(password, cliente.getPassword())) {
+            return cliente;
+        } else {
+            throw new IllegalArgumentException("Email o contraseña incorrectos");
+        }
     }
 }

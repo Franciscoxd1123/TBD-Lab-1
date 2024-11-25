@@ -1,6 +1,10 @@
----Instrucciones detalladas para configurar y desplegar la aplicación.
-Clonar el repositorio Git del proyecto o descargar el proyecto en un archivo Zip y descomprimirlo. Luego ingresar a la carpeta "Frontend TBD-Lab-1" y acceder al simbolo de sistema 
-o Cmd para ejecutar los siguientes comandos:
+Instrucciones detalladas para configurar y desplegar la aplicación.
+
+### Descarga
+Clonar el repositorio Git del proyecto mediante `git clone` o descargar el proyecto en un archivo `.zip` y descomprimirlo donde se desee
+
+### Frontend
+. Luego ingresar a la carpeta "Frontend TBD-Lab-1" y acceder al simbolo de sistema o cmd para ejecutar los siguientes comandos:
 
 ```bash
 npm install
@@ -11,6 +15,9 @@ npm install vue-router
 > [!NOTE]  
 > Sabemos que `npm install` deberia ser suficiente, sin embargo a veces igualmente fue necesario instalar por separado `axios` y `vue-router`, asi evitamos probelmas..
 
+Una vez instalado todo eso, para levantar el frontend se debe en la consola ejecutar `npm run dev` lo que lo abrira donde se especifica en la consola.
+
+
 ## Backend
 
 Después utilizar un IDE a gusto para poder manejar Frontend y Backend del proyecto. Con esto acceder mediante el IDE seleccionado a los archivos `application.properties` y `Sql2oConfig.java` que se encuentran en  `\src\main\resources` y `\src\main\java\com\example\Ecommerce\config" respectivamente, estos se encuentran en el Backend del proyecto y se tienen que modificar credenciales de el nombre de usuario y contraseña de acceso a la base de datos en postgreSQL (Cambiar el puerto si es necesario, pero postgreSQL trabaja por defecto en el puerto 5432).
@@ -18,10 +25,6 @@ Después utilizar un IDE a gusto para poder manejar Frontend y Backend del proye
 Tener creada una base de datos en postgreSQL con el nombre `Ecommerce` y utilizar el script llamado `createDB.sql` para crear la base de datos, luego utilizar `datosDump.sql` para poder cargar datos "dummy" todo esto se encuentra en la ruta del proyecto `\src\main\resources\Datos`, el cual contiene la creación de la base de datos, la creación de tablas y su llenado, además de 2 sentencias para poder visualizar los usuarios y las tareas.
 
 Con esto queda listo para levantar el Backend, en nuestro caso utilizamos IntelliJ 
-
-## Frontend
-
-Para levantar el frontend, solamente basta ingresar a la carpeta `/Frontend TBD-Lab-1/` y en la consola ejectura `npm run dev` lo que lo abrira donde se especifica en la consola.
 
 ## Uso
 
@@ -41,14 +44,21 @@ Página principal:
 - Registrarse: Funcionalidad que registra al usuario (Después redirecciona directamente a iniciar sesión).
 - Iniciar sesión: Funcionalidad que permite loguear al usuario (Después redirecciona al menú del usuario logueado).
 
-Menú usuario:
--Crear tareas: Funcionalidad que permite al usuario crear una tarea en estado "Pendiente" con los datos respectivos.
--Editar tareas: Funcionalidad que permite editar parametros de las tareas existentes del usuario o eliminar una tarea determinada.
--Marcar tareas: Funcinalidad que permite finalizar o dar por completada las tareas pendientes del usuario.
--Ver Tareas: Funcionalidad que permite ver las tareas pendientes y completadas que tenga cada uauarioa, además de poder filtrar tareas por estado o buscar tareas mediante una palabras clave determinada en el titulo 
-o descripcion de las tareas.
--Notificaciones: Funcionalidad que notifica al usuario las tareas que estan protno a vencer.
--Cerrar sesión: Funcionalidad que permite hacer logout al usuario.
+Pagina bienvenida:
+- Aqui se muestra todo los productos disponibles para el usuario.
+- Contiene un buscador y un filtro por categorias
+- Mediante el boton **Agregar a la Orden** se pueden agregar los distintos productos al cartito de compras.
+
+Lista de Ordenes:
+- El listado con todas las ordenes creadas por el usuario especificando su estado y detalle.
+
+Devolucion de productos:
+- Aqui es donde se permite al usuario generar una devolucion de productos, para esto la orden tiene que estar en el estado "Enviado", sino, no se permitira.
+
+Historial de Compras:
+- Todas las compras del usuario que se encuentren enviadas o pagadas pendientes a su envio, en caso de que el pago este pendiente o haya sido devuelto no aparecen.
+
+Cerrar sesion.
 
 ## Pruebas de queries SQL.
 

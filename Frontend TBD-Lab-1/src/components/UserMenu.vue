@@ -77,14 +77,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Botón del carrito -->
-        <div class="cart-section">
-          <button @click="goToCart" class="cart-btn">
-            Ver Carrito
-            <span v-if="cartItemCount" class="cart-count">{{ cartItemCount }}</span>
-          </button>
-        </div>
       </div>
     </main>
   </div>
@@ -186,6 +178,7 @@ h1 {
 
 .form-field {
   margin-bottom: 1rem;
+  padding-right: 1rem;
 }
 
 .label {
@@ -302,31 +295,6 @@ input,
   position: relative;
 }
 
-.cart-btn {
-  background: #42b983;
-  color: black;
-}
-
-.cart-btn:hover {
-  background: #3aa876;
-}
-
-.cart-count {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: orange;
-  color: black;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-
 .logout-btn {
   background: #e74c3c;
   color: black;
@@ -375,7 +343,6 @@ const categorias = ref([]);
 const searchTerm = ref('');
 const selectedCategory = ref('');
 const filteredProducts = ref([]);
-const cartItemCount = ref(0);
 
 // Cargar productos y categorías
 const loadData = async () => {
@@ -420,15 +387,9 @@ const handleLogout = async () => {
   }
 };
 
-// Navegación
-const goToCart = () => {
-  router.push('/cart');
-};
-
-// Función para agregar al carrito
+// Función para agregar al carrito (opcional, puede eliminarse si ya no tiene uso)
 const addToCart = (producto) => {
-  // Implementar lógica del carrito
-  cartItemCount.value++;
+  console.log(`Producto ${producto.nombre} agregado a la orden.`);
 };
 
 onMounted(() => {

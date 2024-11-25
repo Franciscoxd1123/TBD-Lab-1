@@ -48,11 +48,11 @@
           <div v-for="detalle in detallesOrden[orden.idOrden]" 
                :key="detalle.idDetalle" 
                class="detalle-row">
-            <div class="detalle-col">Producto #{{ detalle.idProducto }}</div>
-            <div class="detalle-col">{{ detalle.cantidad }}</div>
-            <div class="detalle-col">${{ detalle.precioUnitario.toFixed(2) }}</div>
-            <div class="detalle-col">${{ (detalle.cantidad * detalle.precioUnitario).toFixed(2) }}</div>
-          </div>
+               <div class="detalle-col">{{ productosCache[detalle.idProducto]?.nombre || 'Cargando...' }}</div>
+              <div class="detalle-col">{{ detalle.cantidad }}</div>
+              <div class="detalle-col">${{ detalle.precioUnitario.toFixed(2) }}</div>
+              <div class="detalle-col">${{ (detalle.cantidad * detalle.precioUnitario).toFixed(2) }}</div>
+            </div>
         </div>
       </div>
     </div>
@@ -68,6 +68,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import ordenService from '../services/ordenService';
 import detalleOrdenService from '../services/detalleOrdenService';
+import productoService from '../services/productoService';
 
 const router = useRouter();
 const ordenes = ref([]);
@@ -75,12 +76,15 @@ const detallesExpandidos = ref({});
 const detallesOrden = ref({});
 const loading = ref(true);
 const error = ref(null);
+const ESTADOS_VALIDOS = ['PAGADA', 'ENVIADA'];
+const productosCache = ref({});
 
 const obtenerClienteId = () => {
   const userData = JSON.parse(localStorage.getItem('userData'));
   return userData?.idCliente;
 };
 
+// Modificar la función cargarOrdenes
 const cargarOrdenes = async () => {
   try {
     loading.value = true;
@@ -92,7 +96,16 @@ const cargarOrdenes = async () => {
     }
 
     const response = await ordenService.getOrdenesPorCliente(clienteId);
-    ordenes.value = response.data;
+    
+    // Filtrar solo las órdenes pagadas y enviadas
+    ordenes.value = response.data.filter(orden => 
+      ESTADOS_VALIDOS.includes(orden.estado.toUpperCase())
+    );
+
+    // Ordenar por fecha más reciente
+    ordenes.value.sort((a, b) => 
+      new Date(b.fechaOrden) - new Date(a.fechaOrden)
+    );
   } catch (err) {
     console.error('Error:', err);
     error.value = 'Error al cargar las órdenes. Por favor, intente nuevamente.';
@@ -106,6 +119,19 @@ const cargarDetallesOrden = async (idOrden) => {
     error.value = null;
     const response = await detalleOrdenService.getDetallesByOrden(idOrden);
     detallesOrden.value[idOrden] = response.data;
+    
+    // Cargar información de productos para los detalles
+    for (const detalle of response.data) {
+      if (!productosCache.value[detalle.idProducto]) {
+        try {
+          const productoResponse = await productoService.getProducto(detalle.idProducto);
+          productosCache.value[detalle.idProducto] = productoResponse.data;
+        } catch (err) {
+          console.error(`Error al cargar el producto ${detalle.idProducto}:`, err);
+          productosCache.value[detalle.idProducto] = { nombre: 'Producto no encontrado' };
+        }
+      }
+    }
   } catch (err) {
     console.error('Error:', err);
     error.value = 'Error al cargar los detalles de la orden';
@@ -131,8 +157,17 @@ const formatearFecha = (fecha) => {
   });
 };
 
+// Modificar la función getEstadoClase para mejorar la visualización
 const getEstadoClase = (estado) => {
-  return estado.toLowerCase();
+  const estadoNormalizado = estado.toUpperCase();
+  switch (estadoNormalizado) {
+    case 'PAGADA':
+      return 'pagada';
+    case 'ENVIADA':
+      return 'enviada';
+    default:
+      return 'otro';
+  }
 };
 
 const goBack = () => {

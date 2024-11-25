@@ -10,7 +10,7 @@ import MarkTask from '../components/MarkTask.vue';
 import ViewTask from '../components/ViewTask.vue';
 import Notifications from '../components/Notifications.vue';
 import HistorialCompra from '../components/HistorialCompra.vue';
-
+import ListaOrdenes from '../components/ListaOrdenes.vue';
 
 
 const routes = [
@@ -69,7 +69,11 @@ const routes = [
     name: 'HistorialCompra',
     component: HistorialCompra,
   },
-  
+  {
+    path: '/lista-ordenes',
+    name: 'ListaOrdenes',
+    component: ListaOrdenes,
+  }
 ];
 
 const router = createRouter({

@@ -39,7 +39,7 @@ public class ClienteRepositoryImp implements ClienteRepository{
 
     @Override
     public List<Cliente> getAll() {
-        String sql = "SELECT id_cliente AS idCliente, nombre, direccion, email, telefono FROM Cliente";
+        String sql = "SELECT id_cliente AS idCliente, nombre, direccion, email, telefono, password FROM Cliente";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).executeAndFetch(Cliente.class);
@@ -52,7 +52,7 @@ public class ClienteRepositoryImp implements ClienteRepository{
 
     @Override
     public Cliente getClienteId(int id){
-        String sql = "SELECT id_cliente AS idCliente, nombre, direccion, email, telefono FROM Cliente WHERE id_cliente = :id";
+        String sql = "SELECT id_cliente AS idCliente, nombre, direccion, email, telefono, password FROM Cliente WHERE id_cliente = :id";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql).addParameter("id",id).executeAndFetchFirst(Cliente.class);
@@ -65,7 +65,7 @@ public class ClienteRepositoryImp implements ClienteRepository{
 
     @Override
     public Cliente update(Cliente cliente, int id){
-        String sql = "UPDATE Cliente SET Nombre = :Nombre, Direccion = :Direccion, Email = :Email, Telefono = :Telefono WHERE id_cliente = :id";
+        String sql = "UPDATE Cliente SET Nombre = :Nombre, Direccion = :Direccion, Email = :Email, Telefono = :Telefono, Password = :Password  WHERE id_cliente = :id";
 
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
@@ -74,6 +74,7 @@ public class ClienteRepositoryImp implements ClienteRepository{
                     .addParameter("Direccion", cliente.getDireccion())
                     .addParameter("Email", cliente.getEmail())
                     .addParameter("Telefono", cliente.getTelefono())
+                    .addParameter("Password", cliente.getPassword())
                     .executeUpdate();
             return cliente;
         }

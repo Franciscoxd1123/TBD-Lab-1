@@ -19,6 +19,7 @@ CREATE TABLE Cliente(
 	direccion VARCHAR(255),
 	email VARCHAR(100),
 	telefono VARCHAR(20),
+    password VARCHAR(100),
 	PRIMARY KEY (id_cliente)
 );
 

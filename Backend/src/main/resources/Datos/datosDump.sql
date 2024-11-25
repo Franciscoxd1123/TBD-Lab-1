@@ -5,12 +5,12 @@ INSERT INTO Categoria (nombre) VALUES
 ('Juguetes'),
 ('Libros');
 
-INSERT INTO Cliente (nombre, direccion, email, telefono) VALUES
-('Juan Pérez', 'Calle Falsa 123', 'juan.perez@example.com', '555-1234'),
-('Ana Gómez', 'Av. Principal 456', 'ana.gomez@example.com', '555-5678'),
-('Carlos López', 'Plaza Central 789', 'carlos.lopez@example.com', '555-8765'),
-('Marta Díaz', 'Calle Verde 321', 'marta.diaz@example.com', '555-4321'),
-('Luis Torres', 'Av. Norte 654', 'luis.torres@example.com', '555-9876');
+INSERT INTO Cliente (nombre, direccion, email, telefono, password) VALUES
+('Juan Pérez', 'Calle Falsa 123', 'juan.perez@example.com', '555-1234', 'mypassword'),
+('Ana Gómez', 'Av. Principal 456', 'ana.gomez@example.com', '555-5678', '123123123123'),
+('Carlos López', 'Plaza Central 789', 'carlos.lopez@example.com', '555-8765', 'youarenotreal'),
+('Marta Díaz', 'Calle Verde 321', 'marta.diaz@example.com', '555-4321', 'asdasd123321'),
+('Luis Torres', 'Av. Norte 654', 'luis.torres@example.com', '555-9876', 'passworddefault');
 
 INSERT INTO Producto (nombre, descripcion, precio, stock, estado, id_categoria) VALUES
 ('Teléfono Móvil', 'Smartphone de última generación', 499.99, 50, 'Disponible', 1),

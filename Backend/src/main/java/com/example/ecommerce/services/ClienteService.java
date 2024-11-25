@@ -18,6 +18,21 @@ public class ClienteService {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public Cliente createCliente(Cliente cliente){
+        if (cliente.getNombre() == null || cliente.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre es obligatorio");
+        }
+        if (cliente.getDireccion() == null || cliente.getDireccion().trim().isEmpty()) {
+            throw new IllegalArgumentException("La dirección es obligatoria");
+        }
+        if (cliente.getEmail() == null || cliente.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("El email es obligatorio");
+        }
+        if (cliente.getTelefono() == null || cliente.getTelefono().trim().isEmpty()) {
+            throw new IllegalArgumentException("El teléfono es obligatorio");
+        }
+        if (cliente.getPassword() == null || cliente.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("La contraseña es obligatoria");
+        }
         String encodedPassword = passwordEncoder.encode(cliente.getPassword());
         cliente.setPassword(encodedPassword);
         return clienteRepository.create(cliente);
@@ -37,36 +52,6 @@ public class ClienteService {
 
     public void deleteCliente(int id){
         clienteRepository.delete(id);
-    }
-
-    public Cliente registrarCliente(Cliente cliente) {
-        validarCamposRegistro(cliente);
-        if (!esEmailValido(cliente.getEmail())) {
-            throw new IllegalArgumentException("El formato del email electrónico no es válido");
-        }
-        if (existeEmail(cliente.getEmail())) {
-            throw new IllegalArgumentException("El email electrónico ya está registrado");
-        }
-
-        return clienteRepository.create(cliente);
-    }
-
-    private void validarCamposRegistro(Cliente cliente) {
-        if (cliente.getNombre() == null || cliente.getNombre().trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre es obligatorio");
-        }
-        if (cliente.getEmail() == null || cliente.getEmail().trim().isEmpty()) {
-            throw new IllegalArgumentException("El email es obligatorio");
-        }
-    }
-
-    private boolean esEmailValido(String email) {
-        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        return Pattern.matches(regex, email);
-    }
-
-    private boolean existeEmail(String email) {
-        return clienteRepository.existeEmail(email);
     }
 
     public Cliente login(String email, String password) {

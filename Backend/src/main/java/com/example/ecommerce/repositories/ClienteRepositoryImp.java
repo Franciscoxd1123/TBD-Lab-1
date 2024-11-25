@@ -15,8 +15,8 @@ public class ClienteRepositoryImp implements ClienteRepository{
 
     @Override
     public Cliente create(Cliente cliente){
-        String sql = "INSERT INTO Cliente (nombre, direccion, email, telefono) " +
-                "VALUES (:nombre, :direccion, :email, :telefono) " +
+        String sql = "INSERT INTO Cliente (nombre, direccion, email, telefono, password) " +
+                "VALUES (:nombre, :direccion, :email, :telefono, :password) " +
                 "RETURNING id_cliente";
         try (Connection con = sql2o.open()) {
             Integer id = con.createQuery(sql, true)
@@ -24,6 +24,7 @@ public class ClienteRepositoryImp implements ClienteRepository{
                     .addParameter("direccion", cliente.getDireccion())
                     .addParameter("email", cliente.getEmail())
                     .addParameter("telefono", cliente.getTelefono())
+                    .addParameter("password", cliente.getPassword())
                     .executeUpdate()
                     .getKey(Integer.class);
 
@@ -110,7 +111,7 @@ public class ClienteRepositoryImp implements ClienteRepository{
 
     @Override
     public Cliente findByEmail(String email) {
-        String sql = "SELECT id_cliente AS idCliente, nombre, direccion, email, telefono FROM Cliente WHERE email = :email";
+        String sql = "SELECT id_cliente AS idCliente, nombre, direccion, email, telefono, password FROM Cliente WHERE email = :email";
 
         try (Connection con = sql2o.open()) {
             return con.createQuery(sql)

@@ -1,6 +1,9 @@
 package com.example.ecommerce.models;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 @Data
 public class Cliente{
 
@@ -9,4 +12,6 @@ public class Cliente{
     private String direccion;
     private String email;
     private String telefono;
+    @Getter @Setter
+    private String password;
 }

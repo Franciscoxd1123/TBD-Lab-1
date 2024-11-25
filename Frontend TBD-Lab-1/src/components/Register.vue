@@ -46,6 +46,16 @@
       >
     </div>
 
+    <div class="form-field">
+      <div class="label">Contraseña</div>
+      <input 
+        v-model="clientData.password"
+        type="password" 
+        required
+        placeholder=" "
+      >
+    </div>
+
     <button type="submit" @click.prevent="handleSubmit">
       Registrarse
     </button>
@@ -64,7 +74,8 @@ const clientData = reactive({
   nombre: '',
   direccion: '',
   email: '',
-  telefono: ''
+  telefono: '',
+  password: ''
 })
 
 const handleSubmit = async () => {
@@ -88,6 +99,11 @@ const handleSubmit = async () => {
 
     if (!clientData.telefono || clientData.telefono.trim() === '') {
       error.value = 'El teléfono es obligatorio'
+      return
+    }
+
+    if (!clientData.password || clientData.password.trim() === '') {
+      error.value = 'La contraseña es obligatoria'
       return
     }
 

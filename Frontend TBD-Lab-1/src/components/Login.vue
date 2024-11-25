@@ -16,6 +16,16 @@
       >
     </div>
 
+    <div class="form-field">
+      <div class="label">Contraseña</div>
+      <input 
+        v-model="loginData.password"
+        type="password" 
+        required
+        placeholder=" "
+      >
+    </div>
+
     <button 
       type="submit" 
       @click.prevent="handleSubmit"
@@ -36,13 +46,14 @@ const error = ref('')
 const loading = ref(false)
 
 const loginData = reactive({
-  email: ''
+  email: '',
+  password: ''
 })
 
 const handleSubmit = async () => {
   try {
-    if (!loginData.email) {
-      error.value = 'Por favor, complete el campo'
+    if (!loginData.email || !loginData.password) {
+      error.value = 'Por favor, complete todos los campos'
       return
     }
 
@@ -50,7 +61,8 @@ const handleSubmit = async () => {
     error.value = ''
 
     const response = await clienteService.loginCliente(
-      loginData.email
+      loginData.email,
+      loginData.password
     )
     
     if (response.data) {
@@ -59,7 +71,8 @@ const handleSubmit = async () => {
         email: response.data.email,
         nombre: response.data.nombre,
         direccion: response.data.direccion,
-        telefono: response.data.telefono
+        telefono: response.data.telefono,
+        password: response.data.password
       }
       
       localStorage.setItem('userData', JSON.stringify(userData))
@@ -73,7 +86,7 @@ const handleSubmit = async () => {
   } catch (err) {
     console.error('Error de login:', err)
     if (err.response?.status === 401) {
-      error.value = 'Email incorrecto'
+      error.value = 'Email o contraseña incorrectos'
     } else if (err.response?.data) {
       error.value = err.response.data
     } else {

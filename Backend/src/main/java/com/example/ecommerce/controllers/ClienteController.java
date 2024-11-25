@@ -59,6 +59,11 @@ public class ClienteController {
                         .badRequest()
                         .body("Correo requerido");
             }
+            if (password == null) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Contraseña requerida");
+            }
 
             Cliente cliente = clienteService.login(email, password);
             return ResponseEntity.ok(cliente);
